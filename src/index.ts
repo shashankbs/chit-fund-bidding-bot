@@ -1,7 +1,7 @@
-const { Client } = require("whatsapp-web.js");
-const qrCode = require("qrcode-terminal");
+import { Client } from "whatsapp-web.js";
+import qrCode from "qrcode-terminal";
 
-const client = new Client();
+const client: Client = new Client({});
 
 client.on("qr", (qr) => {
   qrCode.generate(qr, { small: true });
