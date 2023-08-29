@@ -1,0 +1,4 @@
+# Support files
+package*.json
+tsconfig.json
+
