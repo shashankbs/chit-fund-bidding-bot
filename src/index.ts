@@ -1,19 +1,10 @@
-import { Client } from "whatsapp-web.js";
-import qrCode from "qrcode-terminal";
-import { newMessageHandler } from "./handlers/newMessage.handler";
+import { createExpressServer } from "./server";
+import { setUpWhatsAppClient } from "./whatsapp";
+import "dotenv/config";
 
-const client: Client = new Client({});
+setUpWhatsAppClient();
+const app = createExpressServer();
 
-// Generate the QR to enable user login
-client.on("qr", (qr) => {
-  qrCode.generate(qr, { small: true });
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`);
 });
-
-// Handle the operations once the session is active
-client.on("ready", () => {
-  console.log("Client is ready");
-});
-
-newMessageHandler(client);
-
-client.initialize();

@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  MemberID         Int                @id(map: "PK__Member__0CF04B38CF0F083D")  @default(autoincrement())
+  FirstName        String             @db.NVarChar(50)
+  LastName         String?            @db.NVarChar(50)
+  Phone            String             @unique(map: "UQ__Member__5C7E359E33037A1B") @db.NChar(10)
+  Address          String             @db.NVarChar(Max)
+  ChitFund_Members ChitFund_Members[]
+}
+
+model ChitFund {
+  ChitFundID       Int             @id(map: "PK__ChitFund__B3C24523147BEFB4") @default(autoincrement())
+  StartDate        DateTime           @db.Date
+  EndDate          DateTime           @db.Date
+  ChitsCompleted   Int
+  BalanceAmount    String             @db.NVarChar(50)
+  MemberCount      Int
+  ChitFund_Members ChitFund_Members[]
+}
+
+model ChitFund_Members {
+  ChitFundID Int 
+  MemberID   Int
+  ChitFund   ChitFund @relation(fields: [ChitFundID], references: [ChitFundID], onUpdate: NoAction, map: "FK__ChitFund___ChitF__4F7CD00D")
+  Member     Member   @relation(fields: [MemberID], references: [MemberID], onUpdate: NoAction, map: "FK__ChitFund___Membe__4E88ABD4")
+
+  @@id([ChitFundID, MemberID], map: "PK__ChitFund__230D4190486BFBD4")
+}
